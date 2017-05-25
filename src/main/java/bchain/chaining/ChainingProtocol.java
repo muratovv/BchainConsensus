@@ -5,23 +5,34 @@ import bchain.data.ChainMessage;
 import bchain.data.RequestMessage;
 
 /**
- * @author @muratovv
- * @date 25.05.17
+ * Interface of chaining protocol
  */
-public class ChainingProtocol {
-    public void onRequest(RequestMessage message){
-        // TODO: implement onRequest
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+public interface ChainingProtocol {
 
-    public void onChain(ChainMessage message){
-        // TODO: implement onChain
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    /**
+     * Invoked on head node
+     *
+     * @param message - request intent from user
+     */
+    void onRequest(RequestMessage message);
 
-    public void onAck(AckMessage message){
-        // TODO: implement onAck
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    /**
+     * Invoked on chain request
+     *
+     * @param message - contains information about request and previous node
+     */
+    void onChain(ChainMessage message);
 
+    /**
+     * Invoked on response(commit) to cluster
+     *
+     * @param message - contains information about commit
+     */
+    void onAck(AckMessage message);
+
+
+    /**
+     * Invoked when answer from node not received
+     */
+    void onFailure();
 }

@@ -15,8 +15,11 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'com.github.muratovv:deferred_queue:0.1'
+    compile 'com.github.muratovv:instance_matching:0.1'
 }

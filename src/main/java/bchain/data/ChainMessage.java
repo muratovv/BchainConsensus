@@ -1,8 +1,7 @@
 package bchain.data;
 
 /**
- * @author @muratovv
- * @date 25.05.17
+ * CHAIN from chaining protocol
  */
 public class ChainMessage {
 }

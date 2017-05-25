@@ -1,8 +1,7 @@
 package bchain.client;
 
 /**
- * @author @muratovv
- * @date 25.05.17
+ * Enter point of client's instance
  */
 public class ClientMain {
 }

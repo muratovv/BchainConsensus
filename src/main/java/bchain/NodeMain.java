@@ -1,8 +1,7 @@
 package bchain;
 
 /**
- * @author @muratovv
- * @date 25.05.17
+ * Enter point of cluster node
  */
 public class NodeMain {
 }

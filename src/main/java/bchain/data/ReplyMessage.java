@@ -1,8 +1,7 @@
 package bchain.data;
 
 /**
- * @author @muratovv
- * @date 25.05.17
+ * REPLY from chaining protocol
  */
 public class ReplyMessage {
 }

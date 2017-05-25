@@ -1,8 +1,7 @@
 package bchain.common;
 
 /**
- * @author @muratovv
- * @date 25.05.17
+ * Function for invocation
  */
 public interface Delegate {
     void apply();
