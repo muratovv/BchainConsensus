@@ -1,4 +1,4 @@
-package bchain.client;
+package client;
 
 /**
  * Enter point of client's instance

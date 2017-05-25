@@ -1,4 +1,4 @@
-package bchain;
+package cluster;
 
 /**
  * Enter point of cluster node
