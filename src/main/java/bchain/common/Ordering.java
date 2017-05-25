@@ -20,8 +20,6 @@ public interface Ordering {
 
     /**
      * Set node information about current jvm instance
-     *
-     * @param node
      */
     void setMyNode(Node node);
 
@@ -50,5 +48,18 @@ public interface Ordering {
      */
     boolean iAmProxyTail();
 
+    /**
+     * Is current node from validate set
+     */
     boolean iAmFromValidateSet();
+
+    /**
+     * Get leader node
+     */
+    Node leader();
+
+    /**
+     * Get proxy tail node
+     */
+    Node proxyTail();
 }
