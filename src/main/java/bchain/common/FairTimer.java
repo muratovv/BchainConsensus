@@ -1,5 +1,6 @@
 package bchain.common;
 
+import deferred_queue.core.DeferredQueue;
 import deferred_queue.core.Delay;
 
 /**
@@ -7,27 +8,30 @@ import deferred_queue.core.Delay;
  */
 public class FairTimer implements Timer {
 
+    private DeferredQueue<Void> queue = new DeferredQueue<>();
+    private Delay    currentDelay;
+    private Delegate delegate;
+
     @Override
     public FairTimer setTime(Delay delay) {
-        // TODO: implement setTime
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.currentDelay = delay;
+        return this;
     }
 
     @Override
     public FairTimer setDelegate(Delegate delegate) {
-        // TODO: implement setDelegate
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.delegate = delegate;
+        queue.setOnTimeExpiredCallback(aVoid -> delegate.apply());
+        return this;
     }
 
     @Override
     public void start() {
-        // TODO: implement start
-        throw new UnsupportedOperationException("Not implemented yet");
+        queue.insert(null, currentDelay);
     }
 
     @Override
     public void deny() {
-        // TODO: implement deny
-        throw new UnsupportedOperationException("Not implemented yet");
+        queue.forcePull();
     }
 }

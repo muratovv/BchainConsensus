@@ -22,4 +22,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'com.github.muratovv:deferred_queue:0.1'
     compile 'com.github.muratovv:instance_matching:0.1'
+    compile 'org.eclipse.collections:eclipse-collections-api:8.1.0'
+    compile 'org.eclipse.collections:eclipse-collections:8.1.0'
+    compile 'com.github.niwinz:jnanomsg:0.4.3'
 }

@@ -8,63 +8,82 @@ import java.util.List;
  * Fair implementation of {@link Ordering}
  */
 public class FairOrdering implements Ordering {
+
+    private Integer    myPosition;
+    private List<Node> order;
+
     @Override
     public FairOrdering setOrder(List<Node> list) {
-        // TODO: implement setOrder
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.order = list;
+        invalidatePosition();
+        return this;
+    }
+
+    private void invalidatePosition() {
+        this.myPosition = null;
     }
 
     @Override
     public void setMyNode(Node node) {
-        // TODO: implement setMyNode
-        throw new UnsupportedOperationException("Not implemented yet");
+        for (int i = 0; i < order.size(); i++) {
+            if (order.get(i).equals(node)) {
+                myPosition = i;
+            }
+        }
     }
 
     @Override
     public Node successor() {
-        // TODO: implement successor
-        throw new UnsupportedOperationException("Not implemented yet");
+        return myPosition != order.size() - 1 ? order.get(myPosition + 1) : null;
     }
 
     @Override
     public Node predecessor() {
-        // TODO: implement predecessor
-        throw new UnsupportedOperationException("Not implemented yet");
+        return myPosition != 0 ? order.get(myPosition - 1) : null;
     }
 
     @Override
     public Node getMirrorFromNodeNonValidationSet() {
-        // TODO: implement getMirrorFromNodeNonValidationSet
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (myPosition > proxyPosition()) return null;
+        int offset    = proxyPosition() - myPosition + 1;
+        int mirrorPos = proxyPosition() + offset;
+        if (mirrorPos >= order.size()) {
+            return null;
+        } else return order.get(mirrorPos);
     }
 
     @Override
     public boolean iAmLeader() {
-        // TODO: implement iAmLeader
-        throw new UnsupportedOperationException("Not implemented yet");
+        return myPosition == 0;
     }
 
     @Override
     public boolean iAmProxyTail() {
-        // TODO: implement iAmProxyTail
-        throw new UnsupportedOperationException("Not implemented yet");
+        return myPosition == proxyPosition();
     }
 
     @Override
     public boolean iAmFromValidateSet() {
-        // TODO: implement iAmFromValidateSet
-        throw new UnsupportedOperationException("Not implemented yet");
+        return myPosition <= proxyPosition();
     }
 
     @Override
     public Node leader() {
-        // TODO: implement leader
-        throw new UnsupportedOperationException("Not implemented yet");
+        return order.get(0);
     }
 
     @Override
     public Node proxyTail() {
-        // TODO: implement proxyTail
-        throw new UnsupportedOperationException("Not implemented yet");
+        return order.get(proxyPosition());
+    }
+
+    private int proxyPosition() {
+        int faultNodes = numberFfFaultNodes();
+        return order.size() - faultNodes - 1;
+    }
+
+    private int numberFfFaultNodes() {
+        int N = order.size();
+        return (N - 1) / 3; // divide with floor
     }
 }
