@@ -55,4 +55,16 @@ public class FairOrdering implements Ordering {
         // TODO: implement iAmFromValidateSet
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
+    @Override
+    public Node leader() {
+        // TODO: implement leader
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public Node proxyTail() {
+        // TODO: implement proxyTail
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
