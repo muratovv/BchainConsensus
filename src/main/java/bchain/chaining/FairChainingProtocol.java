@@ -7,7 +7,7 @@ import bchain.data.RequestMessage;
 /**
  * Fair implementation of {@link ChainingProtocol}
  */
-public class FairChainingProtocol implements ChainingProtocol {
+public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStrategy {
     @Override
     public void onRequest(RequestMessage message) {
         // TODO: implement onRequest
@@ -32,4 +32,15 @@ public class FairChainingProtocol implements ChainingProtocol {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    @Override
+    public void onLeaderRequest(RequestMessage message) {
+        // TODO: implement onLeaderRequest
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void onOtherNodeRequest(RequestMessage message) {
+        // TODO: implement onOtherNodeRequest
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
