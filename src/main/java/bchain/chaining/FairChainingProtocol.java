@@ -78,7 +78,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
         Node mirror = ordering.getMirrorFromNodeNonValidationSet();
         if (mirror != null) {
             // message - chain request
-            transport.send(mirror, null);
+            transport.send(mirror, message.retrieveChainMessage().toTransport());
         }
     }
 
