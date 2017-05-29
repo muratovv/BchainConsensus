@@ -62,4 +62,9 @@ public interface Ordering {
      * Get proxy tail node
      */
     Node proxyTail();
+
+    /**
+     * Number of nodes left in validating set
+     */
+    int numberOfNodesLeftInValidatingSet();
 }

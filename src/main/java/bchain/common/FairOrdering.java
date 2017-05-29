@@ -77,12 +77,17 @@ public class FairOrdering implements Ordering {
         return order.get(proxyPosition());
     }
 
+    @Override
+    public int numberOfNodesLeftInValidatingSet() {
+        return order.indexOf(proxyTail()) - myPosition;
+    }
+
     private int proxyPosition() {
-        int faultNodes = numberFfFaultNodes();
+        int faultNodes = numberOfFaultNodes();
         return order.size() - faultNodes - 1;
     }
 
-    private int numberFfFaultNodes() {
+    private int numberOfFaultNodes() {
         int N = order.size();
         return (N - 1) / 3; // divide with floor
     }

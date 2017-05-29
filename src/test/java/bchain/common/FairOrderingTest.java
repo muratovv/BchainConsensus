@@ -2,6 +2,7 @@ package bchain.common;
 
 import bchain.data.Node;
 import org.eclipse.collections.impl.factory.Lists;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public class FairOrderingTest {
 
-    private Ordering order;
+    private FairOrdering order;
 
     private List<Node> clusterOrder = Lists.immutable.of(
             node("0", null), // leader
@@ -97,4 +98,15 @@ public class FairOrderingTest {
         assertEquals(clusterOrder.get(4), order.proxyTail());
     }
 
+    @Test
+    public void leftNodesTest() throws Exception {
+        order.setMyNode(clusterOrder.get(0)); // set leader as my node
+        Assert.assertEquals(4, order.numberOfNodesLeftInValidatingSet());
+
+        order.setMyNode(clusterOrder.get(4)); // set proxy tail as my node
+        Assert.assertEquals(0, order.numberOfNodesLeftInValidatingSet());
+
+        order.setMyNode(clusterOrder.get(2)); // set simple node from validation set as my node
+        Assert.assertEquals(2, order.numberOfNodesLeftInValidatingSet());
+    }
 }
