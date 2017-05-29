@@ -3,8 +3,7 @@ package bchain.chaining;
 import bchain.data.RequestMessage;
 
 /**
- * @author @muratovv
- * @date 28.05.17
+ * Strategy for redirecting {@link RequestMessage} objects to leader
  */
 public interface LeaderRedirectStrategy {
 

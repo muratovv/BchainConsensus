@@ -1,41 +1,100 @@
 package bchain.chaining;
 
+import bchain.common.Ordering;
+import bchain.common.Timer;
 import bchain.data.AckMessage;
 import bchain.data.ChainMessage;
+import bchain.data.Node;
 import bchain.data.RequestMessage;
+import bl.DataProcessor;
+import cluster.transport.Transport;
+import deferred_queue.core.Delay;
 
 /**
  * Fair implementation of {@link ChainingProtocol}
  */
 public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStrategy {
+
+    private final Delay         nodeDelay;
+    private final Transport     transport;
+    private final Timer         timer;
+    private final Ordering      ordering; // assume that ordering.setMyNode() already invoked
+    private final DataProcessor processor;
+
+    public FairChainingProtocol(DataProcessor processor, Ordering ordering, Transport transport,
+                                Timer timer, Delay nodeDelay) {
+        this.nodeDelay = nodeDelay;
+        this.transport = transport;
+        this.timer = timer;
+        this.ordering = ordering;
+        this.processor = processor;
+    }
+
     @Override
     public void onRequest(RequestMessage message) {
-        // TODO: implement onRequest
-        throw new UnsupportedOperationException("Not implemented yet");
+        processor.match(message);
+        if (ordering.iAmLeader()) {
+            onLeaderRequest(message);
+        } else {
+            onOtherNodeRequest(message);
+        }
     }
 
     @Override
     public void onChain(ChainMessage message) {
-        // TODO: implement onChain
-        throw new UnsupportedOperationException("Not implemented yet");
+        // TODO 29.05.17 start timer
+        processor.match(message);
+        sendChainRequest(message);
+        ifProxyChain();
+    }
+
+    private void sendChainRequest(ChainMessage message) {
+        if (ordering.iAmFromValidateSet()) {
+            Node next = ordering.successor();
+            transport.send(next, message.toTransport());
+        }
+    }
+
+    private void ifProxyChain() {
+        if (ordering.iAmProxyTail()) {
+            replayClient();
+            ackInstantiation();
+        }
+    }
+
+    private void replayClient() {
+        // TODO 29.05.17 to - it is client replay, message - answer
+        transport.send(null, null);
+    }
+
+    private void ackInstantiation() {
+        // TODO 29.05.17 message - ask message
+        transport.send(ordering.predecessor(), null);
     }
 
     @Override
     public void onAck(AckMessage message) {
-        // TODO: implement onAck
-        throw new UnsupportedOperationException("Not implemented yet");
+        // TODO 29.05.17 stop timer
+        processor.match(message);
+        Node mirror = ordering.getMirrorFromNodeNonValidationSet();
+        if (mirror != null) {
+            // message - chain request
+            transport.send(mirror, null);
+        }
     }
 
     @Override
     public void onFailure() {
+        // TODO 29.05.17 onFailure should invoke re-chaining protocol
         // TODO: implement onFailure
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
     public void onLeaderRequest(RequestMessage message) {
-        // TODO: implement onLeaderRequest
-        throw new UnsupportedOperationException("Not implemented yet");
+        Node successor = ordering.successor();
+        // TODO 29.05.17 message - new chain
+        transport.send(successor, null);
     }
 
     @Override
