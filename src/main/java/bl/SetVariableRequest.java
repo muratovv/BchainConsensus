@@ -8,4 +8,10 @@ import bchain.data.RequestMessage;
 public class SetVariableRequest extends RequestMessage {
     public String setRequestVariable;
     public String setRequestValue;
+
+    @Override
+    public String toTransport() {
+        // TODO: implement toTransport
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

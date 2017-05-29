@@ -3,5 +3,5 @@ package bchain.data;
 /**
  * REPLY from chaining protocol
  */
-public class ReplyMessage {
+public abstract class ReplyMessage implements Transportable {
 }

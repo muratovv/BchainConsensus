@@ -3,5 +3,5 @@ package bchain.data;
 /**
  * CHAIN from chaining protocol
  */
-public class ChainMessage {
+public abstract class ChainMessage implements Transportable {
 }

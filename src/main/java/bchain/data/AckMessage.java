@@ -3,5 +3,5 @@ package bchain.data;
 /**
  * ASK from chaining protocol
  */
-public class AckMessage {
+public abstract class AckMessage implements Transportable {
 }
