@@ -8,24 +8,22 @@ import bchain.data.Node;
 import bchain.data.RequestMessage;
 import bl.DataProcessor;
 import cluster.transport.Transport;
-import deferred_queue.core.Delay;
 
 /**
  * Fair implementation of {@link ChainingProtocol}
  */
 public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStrategy {
 
-    private final Delay         nodeDelay;
     private final Transport     transport;
-    private final Timer         timer;
+    private final Timer         timer;    // assume that timer.setDelay() already invoked
     private final Ordering      ordering; // assume that ordering.setMyNode() already invoked
     private final DataProcessor processor;
 
     public FairChainingProtocol(DataProcessor processor, Ordering ordering, Transport transport,
-                                Timer timer, Delay nodeDelay) {
-        this.nodeDelay = nodeDelay;
+                                Timer timer) {
         this.transport = transport;
         this.timer = timer;
+        this.timer.setDelegate(this::onFailure);
         this.ordering = ordering;
         this.processor = processor;
     }
@@ -53,6 +51,9 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
             Node next = ordering.successor();
             transport.send(next, message.toTransport());
         }
+        if (ordering.iAmFromValidateSet() && !ordering.iAmProxyTail()) {
+            timer.start();
+        }
     }
 
     private void ifProxyChain(ChainMessage message) {
@@ -79,6 +80,9 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
         if (mirror != null) {
             // message - chain request
             transport.send(mirror, message.retrieveChainMessage().toTransport());
+        }
+        if (ordering.iAmFromValidateSet() && !ordering.iAmProxyTail()) {
+            timer.deny();
         }
     }
 
