@@ -1,4 +1,4 @@
-package bl;
+package bl.data.set;
 
 /**
  * Data class for reply to client on set request

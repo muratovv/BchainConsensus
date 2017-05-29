@@ -1,4 +1,4 @@
-package bl;
+package bl.data.set;
 
 import bchain.data.ChainMessage;
 import bchain.data.RequestMessage;
