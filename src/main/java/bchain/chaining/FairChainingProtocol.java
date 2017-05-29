@@ -45,7 +45,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
         // TODO 29.05.17 start timer
         processor.match(message);
         sendChainRequest(message);
-        ifProxyChain();
+        ifProxyChain(message);
     }
 
     private void sendChainRequest(ChainMessage message) {
@@ -55,21 +55,20 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
         }
     }
 
-    private void ifProxyChain() {
+    private void ifProxyChain(ChainMessage message) {
         if (ordering.iAmProxyTail()) {
-            replayClient();
-            ackInstantiation();
+            replayClient(message);
+            ackInstantiation(message);
         }
     }
 
-    private void replayClient() {
-        // TODO 29.05.17 to - it is client replay, message - answer
-        transport.send(null, null);
+    private void replayClient(ChainMessage message) {
+        // TODO 29.05.17 to - it is client
+        transport.send(message.getClientInformation(), message.makeReplyMessage().toTransport());
     }
 
-    private void ackInstantiation() {
-        // TODO 29.05.17 message - ask message
-        transport.send(ordering.predecessor(), null);
+    private void ackInstantiation(ChainMessage message) {
+        transport.send(ordering.predecessor(), message.makeAckMessage().toTransport());
     }
 
     @Override
@@ -93,8 +92,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
     @Override
     public void onLeaderRequest(RequestMessage message) {
         Node successor = ordering.successor();
-        // TODO 29.05.17 message - new chain
-        transport.send(successor, null);
+        transport.send(successor, message.makeChainMessage().toTransport());
     }
 
     @Override

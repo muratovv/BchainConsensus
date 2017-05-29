@@ -1,5 +1,6 @@
 package cluster.transport;
 
+import bchain.data.Client;
 import bchain.data.Node;
 
 import java.nio.CharBuffer;
@@ -19,7 +20,14 @@ public class LanTransport implements Transport {
 
     @Override
     public void send(Node to, String message) {
+        // TODO: implement send
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 
+    @Override
+    public void send(Client to, String message) {
+        // TODO: implement send
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override

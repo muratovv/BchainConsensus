@@ -1,5 +1,6 @@
 package cluster.transport;
 
+import bchain.data.Client;
 import bchain.data.Node;
 
 /**
@@ -7,6 +8,8 @@ import bchain.data.Node;
  */
 public interface Transport {
     void send(Node to, String message);
+
+    void send(Client to, String message);
 
     void setMessageListener(MessageListener listener);
 }
