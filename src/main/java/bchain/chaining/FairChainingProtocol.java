@@ -6,7 +6,7 @@ import bchain.data.AckMessage;
 import bchain.data.ChainMessage;
 import bchain.data.Node;
 import bchain.data.RequestMessage;
-import bl.DataProcessor;
+import bl.ObjectProcessing;
 import cluster.transport.Transport;
 
 /**
@@ -14,23 +14,23 @@ import cluster.transport.Transport;
  */
 public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStrategy {
 
-    private final Transport     transport;
-    private final Timer         timer;    // assume that timer.setDelay() already invoked
-    private final Ordering      ordering; // assume that ordering.setMyNode() already invoked
-    private final DataProcessor processor;
+    private final Transport        transport;
+    private final Timer            timer;    // assume that timer.setDelay() already invoked
+    private final Ordering         ordering; // assume that ordering.setMyNode() already invoked
+    private final ObjectProcessing processing;
 
-    public FairChainingProtocol(DataProcessor processor, Ordering ordering, Transport transport,
+    public FairChainingProtocol(ObjectProcessing processing, Ordering ordering, Transport transport,
                                 Timer timer) {
         this.transport = transport;
         this.timer = timer;
         this.timer.setDelegate(this::onFailure);
         this.ordering = ordering;
-        this.processor = processor;
+        this.processing = processing;
     }
 
     @Override
     public void onRequest(RequestMessage message) {
-        processor.match(message);
+        processing.match(message);
         if (ordering.iAmLeader()) {
             onLeaderRequest(message);
         } else {
@@ -40,8 +40,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
 
     @Override
     public void onChain(ChainMessage message) {
-        // TODO 29.05.17 start timer
-        processor.match(message);
+        processing.match(message);
         sendChainRequest(message);
         ifProxyChain(message);
     }
@@ -74,8 +73,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
 
     @Override
     public void onAck(AckMessage message) {
-        // TODO 29.05.17 stop timer
-        processor.match(message);
+        processing.match(message);
         Node mirror = ordering.getMirrorFromNodeNonValidationSet();
         if (mirror != null) {
             // message - chain request
