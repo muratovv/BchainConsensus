@@ -2,10 +2,7 @@ package bchain.chaining;
 
 import bchain.common.Ordering;
 import bchain.common.Timer;
-import bchain.data.AckMessage;
-import bchain.data.ChainMessage;
-import bchain.data.Node;
-import bchain.data.RequestMessage;
+import bchain.data.*;
 import bl.ObjectProcessing;
 import cluster.transport.Transport;
 
@@ -29,20 +26,20 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
     }
 
     @Override
-    public void onRequest(RequestMessage message) {
+    public void onRequest(RequestMessage message, Client client) {
         processing.match(message);
         if (ordering.iAmLeader()) {
-            onLeaderRequest(message);
+            onLeaderRequest(message, client);
         } else {
-            onOtherNodeRequest(message);
+            onOtherNodeRequest(message, client);
         }
     }
 
     @Override
-    public void onChain(ChainMessage message) {
-        processing.match(message);
-        sendChainRequest(message);
-        ifProxyChain(message);
+    public void onChain(ChainMessage chain) {
+        processing.match(chain);
+        sendChainRequest(chain);
+        ifProxyChain(chain);
     }
 
     private void sendChainRequest(ChainMessage message) {
@@ -92,13 +89,13 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
     }
 
     @Override
-    public void onLeaderRequest(RequestMessage message) {
+    public void onLeaderRequest(RequestMessage message, Client client) {
         Node successor = ordering.successor();
-        transport.send(successor, message.makeChainMessage().toTransport());
+        transport.send(successor, ChainMessage.chain(message, client).toTransport());
     }
 
     @Override
-    public void onOtherNodeRequest(RequestMessage message) {
+    public void onOtherNodeRequest(RequestMessage request, Client client) {
         // TODO: implement onOtherNodeRequest
         throw new UnsupportedOperationException("Not implemented yet");
     }

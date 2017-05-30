@@ -33,11 +33,11 @@ public abstract class ChainMessage implements Transportable {
         return client;
     }
 
-    public static ChainMessage chain(RequestMessage request) {
-        return factory.get(request);
+    public static ChainMessage chain(RequestMessage request, Client client) {
+        return factory.get(request, client);
     }
 
     public static abstract class ChainFactory {
-        public abstract ChainMessage get(RequestMessage request);
+        public abstract ChainMessage get(RequestMessage request, Client client);
     }
 }

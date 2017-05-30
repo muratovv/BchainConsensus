@@ -2,6 +2,7 @@ package bchain.chaining;
 
 import bchain.data.AckMessage;
 import bchain.data.ChainMessage;
+import bchain.data.Client;
 import bchain.data.RequestMessage;
 
 /**
@@ -12,16 +13,17 @@ public interface ChainingProtocol {
     /**
      * Invoked on head node
      *
-     * @param message - request intent from user
+     * @param request - intent from user
+     * @param client  - information about client connection
      */
-    void onRequest(RequestMessage message);
+    void onRequest(RequestMessage request, Client client);
 
     /**
      * Invoked on chain request
      *
-     * @param message - contains information about request and previous node
+     * @param chain - contains information about request and previous node
      */
-    void onChain(ChainMessage message);
+    void onChain(ChainMessage chain);
 
     /**
      * Invoked on response(commit) to cluster
