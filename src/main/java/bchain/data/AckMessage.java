@@ -12,6 +12,9 @@ public abstract class AckMessage implements Transportable {
         this.chain = chain;
     }
 
+    /**
+     * Generate new {@link AckMessage} for bChain cluster pipeline
+     */
     public static AckMessage ack(ChainMessage chain) {
         return factory.get(chain);
     }

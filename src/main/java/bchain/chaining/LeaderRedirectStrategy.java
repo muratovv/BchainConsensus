@@ -1,6 +1,5 @@
 package bchain.chaining;
 
-import bchain.data.Client;
 import bchain.data.RequestMessage;
 
 /**
@@ -8,8 +7,8 @@ import bchain.data.RequestMessage;
  */
 public interface LeaderRedirectStrategy {
 
-    void onLeaderRequest(RequestMessage request, Client client);
+    void onLeaderRequest(RequestMessage request);
 
-    void onOtherNodeRequest(RequestMessage request, Client client);
+    void onOtherNodeRequest(RequestMessage request);
 
 }
