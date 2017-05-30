@@ -1,6 +1,5 @@
 package bl.data.get;
 
-import bchain.data.ChainMessage;
 import bchain.data.RequestMessage;
 
 /**
@@ -12,12 +11,6 @@ public class GetVariableRequest extends RequestMessage {
     @Override
     public String toTransport() {
         // TODO: implement toTransport
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Override
-    public ChainMessage makeChainMessage() {
-        // TODO: implement makeChainMessage
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }

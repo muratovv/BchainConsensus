@@ -12,8 +12,19 @@ public class FairOrdering implements Ordering {
     private Integer    myPosition;
     private List<Node> order;
 
-    @Override
-    public FairOrdering setOrder(List<Node> list) {
+    public FairOrdering(List<Node> list, Node node) {
+        setOrder(list).setMyNode(node);
+    }
+
+    private void setMyNode(Node node) {
+        for (int i = 0; i < order.size(); i++) {
+            if (order.get(i).equals(node)) {
+                myPosition = i;
+            }
+        }
+    }
+
+    private FairOrdering setOrder(List<Node> list) {
         this.order = list;
         invalidatePosition();
         return this;
@@ -21,15 +32,6 @@ public class FairOrdering implements Ordering {
 
     private void invalidatePosition() {
         this.myPosition = null;
-    }
-
-    @Override
-    public void setMyNode(Node node) {
-        for (int i = 0; i < order.size(); i++) {
-            if (order.get(i).equals(node)) {
-                myPosition = i;
-            }
-        }
     }
 
     @Override

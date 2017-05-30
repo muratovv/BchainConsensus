@@ -2,27 +2,10 @@ package bchain.common;
 
 import bchain.data.Node;
 
-import java.util.List;
-
 /**
  * Ordering of nodes in cluster
  */
 public interface Ordering {
-
-    /**
-     * Set cluster order
-     *
-     * @param list of nodes in cluster order
-     *
-     * @return this
-     */
-    FairOrdering setOrder(List<Node> list);
-
-    /**
-     * Set node information about current jvm instance
-     */
-    void setMyNode(Node node);
-
     /**
      * Get next node in order
      */
