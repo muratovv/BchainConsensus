@@ -1,17 +1,33 @@
 package bl.data.set;
 
 import bchain.data.RequestMessage;
+import bl.data.JsonParser;
+
+import java.util.Objects;
 
 /**
  * Data class for setting message to cluster
  */
 public class SetVariableRequest extends RequestMessage {
-    public String setRequestVariable;
-    public String setRequestValue;
+    public String variable;
+    public String value;
 
     @Override
     public String toTransport() {
-        // TODO: implement toTransport
-        throw new UnsupportedOperationException("Not implemented yet");
+        return JsonParser.gson.toJson(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(variable, value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SetVariableRequest)) return false;
+        SetVariableRequest request = (SetVariableRequest) o;
+        return Objects.equals(variable, request.variable) &&
+                Objects.equals(value, request.value);
     }
 }
