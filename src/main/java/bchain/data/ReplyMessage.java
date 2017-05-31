@@ -3,7 +3,7 @@ package bchain.data;
 /**
  * REPLY from chaining protocol
  */
-public abstract class ReplyMessage implements Transportable {
+public abstract class ReplyMessage extends Message implements Transportable {
 
     public static ReplyFactory factory;
 
