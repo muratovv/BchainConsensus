@@ -20,7 +20,7 @@ public class DataProcessor implements ObjectProcessing {
             .build();
 
     @Override
-    public void match(Object object) {
+    public void match(Object object, boolean commitNow) {
         matcher.match(object);
     }
 

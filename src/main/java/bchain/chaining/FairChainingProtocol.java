@@ -27,7 +27,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
 
     @Override
     public void onRequest(RequestMessage request) {
-        processing.match(request);
+        processing.match(request, ordering.iAmFromValidateSet() && !ordering.iAmProxyTail());
         if (ordering.iAmLeader()) {
             onLeaderRequest(request);
         } else {
@@ -37,7 +37,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
 
     @Override
     public void onChain(ChainMessage chain) {
-        processing.match(chain.request);
+        processing.match(chain.request, !(ordering.iAmFromValidateSet() && !ordering.iAmProxyTail()));
         sendChainRequest(chain);
         ifProxyChain(chain);
     }
@@ -60,7 +60,6 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
     }
 
     private void replayToClient(ChainMessage chain, ReplyMessage reply) {
-        // TODO 29.05.17 to - it is client
         transport.send(chain.request.client, ReplyMessage.factory.serialize(reply));
     }
 
@@ -72,11 +71,11 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
     public void onAck(AckMessage ack) {
         Node mirror = ordering.getMirrorFromNodeNonValidationSet();
         if (mirror != null) {
-            // message - chain request
-            transport.send(mirror, ChainMessage.factory.serialize(ack.retrieveChainMessage()));
+            transport.send(mirror, ChainMessage.factory.serialize(ack.chain));
         }
         if (ordering.iAmFromValidateSet() && !ordering.iAmProxyTail()) {
             timer.deny();
+            processing.match(ack.chain.request, true);
         }
     }
 

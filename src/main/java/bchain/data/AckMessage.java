@@ -8,7 +8,7 @@ import java.util.Objects;
 public class AckMessage {
 
     public static AckSerializeFactory factory;
-    private       ChainMessage        chain;
+    public        ChainMessage        chain;
 
     public AckMessage(ChainMessage chain) {
         this.chain = chain;
@@ -29,13 +29,6 @@ public class AckMessage {
         if (!(o instanceof AckMessage)) return false;
         AckMessage that = (AckMessage) o;
         return Objects.equals(chain, that.chain);
-    }
-
-    /**
-     * Retrieve existed {@link ChainMessage}
-     */
-    public ChainMessage retrieveChainMessage() {
-        return chain;
     }
 
     public static abstract class AckSerializeFactory {
