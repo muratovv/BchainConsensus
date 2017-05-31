@@ -1,8 +1,7 @@
 package bl;
 
 /**
- * @author @muratovv
- * @date 30.05.17
+ * Interface for matching input object on classes
  */
 public interface ObjectProcessing {
     void match(Object object);

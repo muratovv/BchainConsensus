@@ -1,7 +1,7 @@
 package bl.data.get;
 
 import bchain.data.RequestMessage;
-import bl.data.JsonParser;
+import bl.data.JsonTransport;
 
 import java.util.Objects;
 
@@ -13,7 +13,7 @@ public class GetVariableRequest extends RequestMessage {
 
     @Override
     public String toTransport() {
-        return JsonParser.gson.toJson(this);
+        return JsonTransport.gson.toJson(this);
     }
 
     @Override

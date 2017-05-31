@@ -1,6 +1,9 @@
 package bl.data;
 
+import bchain.data.AckMessage;
+import bchain.data.ChainMessage;
 import bchain.data.Message;
+import bchain.data.RequestMessage;
 import bl.data.get.GetReply;
 import bl.data.get.GetVariableRequest;
 import bl.data.set.SetReply;
@@ -14,11 +17,42 @@ import java.util.Map;
 /**
  * Class contains global link to parser
  */
-public class JsonParser {
+public class JsonTransport {
+
     public static Gson gson = new GsonBuilder()
             .registerTypeAdapter(Message.class, new MessageDeserializer())
             .setLenient()
             .create();
+
+
+    public static ChainMessage.ChainFactory jsonChainFactory = new ChainMessage.ChainFactory() {
+        @Override
+        public ChainMessage get(RequestMessage request) {
+            return new ChainMessage(request) {
+                @Override
+                public String toTransport() {
+                    return gson.toJson(this);
+                }
+            };
+        }
+    };
+
+    public static AckMessage.AckFactory jsonAckFactory = new AckMessage.AckFactory() {
+        @Override
+        public AckMessage get(ChainMessage chain) {
+            return new AckMessage(chain) {
+                @Override
+                public String toTransport() {
+                    return gson.toJson(this);
+                }
+            };
+        }
+    };
+
+    static {
+        ChainMessage.factory = jsonChainFactory;
+        AckMessage.factory = jsonAckFactory;
+    }
 
     private static class MessageDeserializer implements JsonDeserializer<Message> {
 

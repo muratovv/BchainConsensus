@@ -1,7 +1,7 @@
 package bl.data.set;
 
 import bchain.data.ReplyMessage;
-import bl.data.JsonParser;
+import bl.data.JsonTransport;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class SetReply extends ReplyMessage {
 
     @Override
     public String toTransport() {
-        return JsonParser.gson.toJson(this);
+        return JsonTransport.gson.toJson(this);
     }
 
     @Override

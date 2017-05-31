@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * Tests for {@code bl.data.*}
  */
-public class JsonParserTest {
+public class JsonTransportTest {
     @Test
     public void correctHierarchyTest() throws Exception {
         SetReply reply = new SetReply();
@@ -20,10 +20,10 @@ public class JsonParserTest {
         request.value = "23E3F$R";
         request.variable = "var";
 
-        String replyRaw   = JsonParser.gson.toJson(reply);
-        String requestRaw = JsonParser.gson.toJson(request);
+        String replyRaw   = reply.toTransport();
+        String requestRaw = request.toTransport();
 
-        Assert.assertEquals(reply, JsonParser.gson.fromJson(replyRaw, Message.class));
-        Assert.assertEquals(request, JsonParser.gson.fromJson(requestRaw, Message.class));
+        Assert.assertEquals(reply, JsonTransport.gson.fromJson(replyRaw, Message.class));
+        Assert.assertEquals(request, JsonTransport.gson.fromJson(requestRaw, Message.class));
     }
 }

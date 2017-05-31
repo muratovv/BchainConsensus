@@ -8,7 +8,7 @@ public abstract class ChainMessage implements Transportable {
     public static ChainFactory   factory;
     private       RequestMessage request;
 
-    private ChainMessage(RequestMessage request) {
+    protected ChainMessage(RequestMessage request) {
         this.request = request;
     }
 
