@@ -5,22 +5,22 @@ import java.util.Objects;
 /**
  * CHAIN from chaining protocol
  */
-public class ChainMessage implements Transportable {
+public class ChainMessage {
 
-    public static ChainFactory   factory;
-    private       RequestMessage request;
+    public static ChainSerializeFactory factory;
+    public        RequestMessage        request;
 
     protected ChainMessage(RequestMessage request) {
         this.request = request;
     }
 
     public static ChainMessage chain(RequestMessage request) {
-        return factory.get(request);
+        return new ChainMessage(request);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRequest());
+        return Objects.hash(request);
     }
 
     @Override
@@ -28,20 +28,10 @@ public class ChainMessage implements Transportable {
         if (this == o) return true;
         if (!(o instanceof ChainMessage)) return false;
         ChainMessage that = (ChainMessage) o;
-        return Objects.equals(getRequest(), that.getRequest());
+        return Objects.equals(request, that.request);
     }
 
-    public RequestMessage getRequest() {
-        return request;
-    }
-
-    @Override
-    public String toTransport() {
-        // TODO: implement toTransport
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public static abstract class ChainFactory {
-        public abstract ChainMessage get(RequestMessage request);
+    public static abstract class ChainSerializeFactory {
+        public abstract String serialize(ChainMessage chain);
     }
 }

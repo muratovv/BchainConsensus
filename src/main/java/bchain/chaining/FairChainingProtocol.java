@@ -2,14 +2,9 @@ package bchain.chaining;
 
 import bchain.common.Ordering;
 import bchain.common.Timer;
-import bchain.data.AckMessage;
-import bchain.data.ChainMessage;
-import bchain.data.Node;
-import bchain.data.RequestMessage;
+import bchain.data.*;
 import bl.ObjectProcessing;
 import cluster.transport.Transport;
-
-import static bchain.data.ReplyMessage.reply;
 
 /**
  * Fair implementation of {@link ChainingProtocol}
@@ -42,15 +37,15 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
 
     @Override
     public void onChain(ChainMessage chain) {
-        processing.match(chain.getRequest());
+        processing.match(chain.request);
         sendChainRequest(chain);
         ifProxyChain(chain);
     }
 
-    private void sendChainRequest(ChainMessage message) {
+    private void sendChainRequest(ChainMessage chain) {
         if (ordering.iAmFromValidateSet()) {
             Node next = ordering.successor();
-            transport.send(next, message.toTransport());
+            transport.send(next, ChainMessage.factory.serialize(chain));
         }
         if (ordering.iAmFromValidateSet() && !ordering.iAmProxyTail()) {
             timer.start();
@@ -59,18 +54,18 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
 
     private void ifProxyChain(ChainMessage message) {
         if (ordering.iAmProxyTail()) {
-            replayToClient(message);
+            replayToClient(message, processing.getAnswer());
             ackInstantiation(message);
         }
     }
 
-    private void replayToClient(ChainMessage chain) {
+    private void replayToClient(ChainMessage chain, ReplyMessage reply) {
         // TODO 29.05.17 to - it is client
-        transport.send(chain.getRequest().getClientInformation(), reply(chain).toTransport());
+        transport.send(chain.request.client, ReplyMessage.factory.serialize(reply));
     }
 
     private void ackInstantiation(ChainMessage chain) {
-        transport.send(ordering.predecessor(), AckMessage.ack(chain).toTransport());
+        transport.send(ordering.predecessor(), AckMessage.factory.serialize(AckMessage.ack(chain)));
     }
 
     @Override
@@ -78,7 +73,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
         Node mirror = ordering.getMirrorFromNodeNonValidationSet();
         if (mirror != null) {
             // message - chain request
-            transport.send(mirror, ack.retrieveChainMessage().toTransport());
+            transport.send(mirror, ChainMessage.factory.serialize(ack.retrieveChainMessage()));
         }
         if (ordering.iAmFromValidateSet() && !ordering.iAmProxyTail()) {
             timer.deny();
@@ -95,7 +90,7 @@ public class FairChainingProtocol implements ChainingProtocol, LeaderRedirectStr
     @Override
     public void onLeaderRequest(RequestMessage message) {
         Node successor = ordering.successor();
-        transport.send(successor, ChainMessage.chain(message).toTransport());
+        transport.send(successor, ChainMessage.factory.serialize(ChainMessage.chain(message)));
     }
 
     @Override

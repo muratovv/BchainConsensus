@@ -1,7 +1,6 @@
 package bl.data.set;
 
 import bchain.data.RequestMessage;
-import bl.data.JsonTransport;
 
 import java.util.Objects;
 
@@ -11,11 +10,6 @@ import java.util.Objects;
 public class SetVariableRequest extends RequestMessage {
     public String variable;
     public String value;
-
-    @Override
-    public String toTransport() {
-        return JsonTransport.deserializer.toJson(this);
-    }
 
     @Override
     public int hashCode() {

@@ -5,11 +5,12 @@ import java.util.Objects;
 /**
  * REQUEST from chaining protocol
  */
-public abstract class RequestMessage extends Message implements Transportable {
-    private Client client;
+public abstract class RequestMessage extends Message {
+    public Client client;
 
-    public Client getClientInformation() {
-        return client;
+    @Override
+    public int hashCode() {
+        return Objects.hash(client);
     }
 
     @Override
@@ -20,14 +21,7 @@ public abstract class RequestMessage extends Message implements Transportable {
         return Objects.equals(client, that.client);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(client);
-    }
-
-    @Override
-    public String toTransport() {
-        // TODO: implement toTransport
-        throw new UnsupportedOperationException("Not implemented yet");
+    public static abstract class RequestSerializeFactory {
+        public abstract String serialize(RequestMessage request);
     }
 }

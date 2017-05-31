@@ -3,18 +3,12 @@ package bchain.data;
 /**
  * REPLY from chaining protocol
  */
-public abstract class ReplyMessage extends Message implements Transportable {
+public abstract class ReplyMessage extends Message {
 
-    public static ReplyFactory factory;
+    public static ReplySerializeFactory factory;
+    public        RequestMessage        request;
 
-    /**
-     * Generate new {@link ReplyMessage} for bChain cluster pipeline
-     */
-    public static ReplyMessage reply(ChainMessage chain) {
-        return factory.get(chain);
-    }
-
-    public abstract class ReplyFactory {
-        public abstract ReplyMessage get(ChainMessage chain);
+    public abstract static class ReplySerializeFactory {
+        public abstract String serialize(ReplyMessage reply);
     }
 }

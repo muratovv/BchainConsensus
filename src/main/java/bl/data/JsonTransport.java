@@ -1,9 +1,6 @@
 package bl.data;
 
-import bchain.data.AckMessage;
-import bchain.data.ChainMessage;
-import bchain.data.Message;
-import bchain.data.RequestMessage;
+import bchain.data.*;
 import bl.data.get.GetReply;
 import bl.data.get.GetVariableRequest;
 import bl.data.set.SetReply;
@@ -22,6 +19,7 @@ public class JsonTransport {
     public static Gson deserializer = new GsonBuilder()
             .registerTypeAdapter(Message.class, new MessageDeserializer())
             .registerTypeAdapter(RequestMessage.class, new MessageDeserializer())
+            .registerTypeAdapter(ReplyMessage.class, new MessageDeserializer())
             .setLenient()
             .create();
 
@@ -29,33 +27,39 @@ public class JsonTransport {
             .setLenient()
             .create();
 
-    public static ChainMessage.ChainFactory jsonChainFactory = new ChainMessage.ChainFactory() {
+    public static ChainMessage.ChainSerializeFactory jsonChainFactory = new ChainMessage.ChainSerializeFactory() {
         @Override
-        public ChainMessage get(RequestMessage request) {
-            return new ChainMessage(request) {
-                @Override
-                public String toTransport() {
-                    return serializer.toJson(this, ChainMessage.class);
-                }
-            };
+        public String serialize(ChainMessage chain) {
+            return serializer.toJson(chain);
         }
     };
 
-    public static AckMessage.AckFactory jsonAckFactory = new AckMessage.AckFactory() {
+    public static AckMessage.AckSerializeFactory jsonAckFactory = new AckMessage.AckSerializeFactory() {
         @Override
-        public AckMessage get(ChainMessage chain) {
-            return new AckMessage(chain) {
-                @Override
-                public String toTransport() {
-                    return serializer.toJson(this, AckMessage.class);
-                }
-            };
+        public String serialize(AckMessage ack) {
+            return serializer.toJson(ack);
+        }
+    };
+
+    public static ReplyMessage.ReplySerializeFactory jsonReplyFactory = new ReplyMessage.ReplySerializeFactory() {
+        @Override
+        public String serialize(ReplyMessage reply) {
+            return serializer.toJson(reply);
+        }
+    };
+
+    public static RequestMessage.RequestSerializeFactory jsonRequestFactory = new RequestMessage.RequestSerializeFactory() {
+        @Override
+        public String serialize(RequestMessage request) {
+            return serializer.toJson(request);
         }
     };
 
     static {
         ChainMessage.factory = jsonChainFactory;
         AckMessage.factory = jsonAckFactory;
+        ReplyMessage.factory = jsonReplyFactory;
+
     }
 
     private static class MessageDeserializer implements JsonDeserializer<Message> {

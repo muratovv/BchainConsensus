@@ -1,7 +1,6 @@
 package bl.data.set;
 
 import bchain.data.ReplyMessage;
-import bl.data.JsonTransport;
 
 import java.util.Objects;
 
@@ -11,11 +10,6 @@ import java.util.Objects;
 public class SetReply extends ReplyMessage {
     public String variable;
     public String status;
-
-    @Override
-    public String toTransport() {
-        return JsonTransport.deserializer.toJson(this);
-    }
 
     @Override
     public boolean equals(Object o) {

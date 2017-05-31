@@ -1,5 +1,6 @@
 package bl;
 
+import bchain.data.ReplyMessage;
 import bl.data.get.GetReply;
 import bl.data.get.GetVariableRequest;
 import bl.data.set.SetReply;
@@ -21,6 +22,12 @@ public class DataProcessor implements ObjectProcessing {
     @Override
     public void match(Object object) {
         matcher.match(object);
+    }
+
+    @Override
+    public ReplyMessage getAnswer() {
+        // TODO: implement getAnswer
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     private void onSetVariableRequest(SetVariableRequest request) {

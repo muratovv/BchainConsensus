@@ -20,8 +20,8 @@ public class JsonTransportTest {
         request.value = "23E3F$R";
         request.variable = "var";
 
-        String replyRaw   = reply.toTransport();
-        String requestRaw = request.toTransport();
+        String replyRaw   = JsonTransport.jsonReplyFactory.serialize(reply);
+        String requestRaw = JsonTransport.jsonRequestFactory.serialize(request);
 
         Assert.assertEquals(reply, JsonTransport.deserializer.fromJson(replyRaw, Message.class));
         Assert.assertEquals(request, JsonTransport.deserializer.fromJson(requestRaw, Message.class));

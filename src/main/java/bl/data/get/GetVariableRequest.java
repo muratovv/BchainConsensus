@@ -1,7 +1,6 @@
 package bl.data.get;
 
 import bchain.data.RequestMessage;
-import bl.data.JsonTransport;
 
 import java.util.Objects;
 
@@ -12,8 +11,8 @@ public class GetVariableRequest extends RequestMessage {
     public String variable;
 
     @Override
-    public String toTransport() {
-        return JsonTransport.deserializer.toJson(this);
+    public int hashCode() {
+        return Objects.hash(variable);
     }
 
     @Override
@@ -22,10 +21,5 @@ public class GetVariableRequest extends RequestMessage {
         if (!(o instanceof GetVariableRequest)) return false;
         GetVariableRequest that = (GetVariableRequest) o;
         return Objects.equals(variable, that.variable);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(variable);
     }
 }
