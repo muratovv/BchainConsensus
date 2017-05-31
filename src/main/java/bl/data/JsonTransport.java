@@ -19,11 +19,15 @@ import java.util.Map;
  */
 public class JsonTransport {
 
-    public static Gson gson = new GsonBuilder()
+    public static Gson deserializer = new GsonBuilder()
             .registerTypeAdapter(Message.class, new MessageDeserializer())
+            .registerTypeAdapter(RequestMessage.class, new MessageDeserializer())
             .setLenient()
             .create();
 
+    public static Gson serializer = new GsonBuilder()
+            .setLenient()
+            .create();
 
     public static ChainMessage.ChainFactory jsonChainFactory = new ChainMessage.ChainFactory() {
         @Override
@@ -31,7 +35,7 @@ public class JsonTransport {
             return new ChainMessage(request) {
                 @Override
                 public String toTransport() {
-                    return gson.toJson(this);
+                    return serializer.toJson(this, ChainMessage.class);
                 }
             };
         }
@@ -43,7 +47,7 @@ public class JsonTransport {
             return new AckMessage(chain) {
                 @Override
                 public String toTransport() {
-                    return gson.toJson(this);
+                    return serializer.toJson(this, AckMessage.class);
                 }
             };
         }

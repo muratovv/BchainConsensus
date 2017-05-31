@@ -23,7 +23,7 @@ public class JsonTransportTest {
         String replyRaw   = reply.toTransport();
         String requestRaw = request.toTransport();
 
-        Assert.assertEquals(reply, JsonTransport.gson.fromJson(replyRaw, Message.class));
-        Assert.assertEquals(request, JsonTransport.gson.fromJson(requestRaw, Message.class));
+        Assert.assertEquals(reply, JsonTransport.deserializer.fromJson(replyRaw, Message.class));
+        Assert.assertEquals(request, JsonTransport.deserializer.fromJson(requestRaw, Message.class));
     }
 }

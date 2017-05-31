@@ -14,7 +14,7 @@ public class SetVariableRequest extends RequestMessage {
 
     @Override
     public String toTransport() {
-        return JsonTransport.gson.toJson(this);
+        return JsonTransport.deserializer.toJson(this);
     }
 
     @Override
